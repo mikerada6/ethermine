@@ -17,7 +17,7 @@ import rad.mining.ethermine.util.PayloadUtil;
 	public
 	class AliveController {
 
-		private final String version = "0.0.1";
+		private final String version = "1.1.0";
 
 		@GetMapping("")
 		public ResponseEntity<Payload> alive() {
@@ -27,7 +27,7 @@ import rad.mining.ethermine.util.PayloadUtil;
 		@GetMapping("/version")
 		public
 		ResponseEntity<Payload> version() {
-			log.info("is alive");
+			log.info("is version");
 			return ResponseEntity.status(HttpStatus.OK).body(PayloadUtil.createPayload(version));
 		}
 }
