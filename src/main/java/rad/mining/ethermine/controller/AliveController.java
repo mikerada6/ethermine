@@ -1,33 +1,46 @@
 package rad.mining.ethermine.controller;
 
+import java.util.HashMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import rad.mining.ethermine.domain.Payload;
 import rad.mining.ethermine.util.PayloadUtil;
 
-	@RestController
-	@RequestMapping("/api/alive")
-	@AllArgsConstructor
-	@Slf4j
+@RestController
+@RequestMapping("/api")
+@AllArgsConstructor
+@NoArgsConstructor
+@Slf4j
+public
+class AliveController {
+
+	@Autowired BuildProperties buildProperties;
+
+	@GetMapping("/alive")
 	public
-	class AliveController {
+	ResponseEntity<String> alive() {
+		log.info("Alive");
+		return ResponseEntity.status(HttpStatus.OK).body("alive");
+	}
 
-		private final String version = "1.1.0";
+	@GetMapping("/version")
+	public
+	ResponseEntity<HashMap<String, String>> version() {
 
-		@GetMapping("")
-		public ResponseEntity<Payload> alive() {
-			log.info("is alive");
-			return ResponseEntity.status(HttpStatus.OK).body(PayloadUtil.createPayload("alive"));
-		}
-		@GetMapping("/version")
-		public
-		ResponseEntity<Payload> version() {
-			log.info("is version");
-			return ResponseEntity.status(HttpStatus.OK).body(PayloadUtil.createPayload(version));
-		}
+		HashMap<String, String> info = new HashMap<>();
+		info.put("version", buildProperties.getVersion());
+		info.put("time", buildProperties.getTime().toString());
+
+		log.info("version - {}.", info.get("version"));
+		log.info("time - {}.", info.get("time"));
+		return ResponseEntity.status(HttpStatus.OK).body(info);
+	}
 }
